@@ -2,7 +2,6 @@ import org.apache.commons.collections4.iterators.PermutationIterator;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,21 +15,20 @@ final class EulerUtils {
     /**
      * Returns a {@link Set} of this number's proper divisors.
      *
-     * @param num
-     * @return
+     * @param num The number to find the divisors of.
+     * @return A {@link Set} of this number's divisors.
      */
     static Set<Long> findDivisors(final long num) {
-        if (num < 0) {
+        if (num < 1) {
             return Collections.emptySet();
         }
-        final Set<Long> factors = new HashSet<>();
-        for (long i = 1; i < Math.sqrt(num); i++) {
-            if (num % i == 0) {
-                factors.add(i);
-                factors.add(num / i);
-            }
-        }
-        return factors;
+
+        return LongStream.iterate(1, i -> i + 1)
+                .takeWhile(i -> i < Math.sqrt(num))
+                .filter(i -> num % i == 0)
+                .flatMap(i -> LongStream.of(i, num / i))
+                .boxed()
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -55,14 +53,14 @@ final class EulerUtils {
      * @see EulerUtils#streamProperDivisors
      */
     static long findProperDivisorSum(final long num) {
-        return EulerUtils.streamProperDivisors(num).sum();
+        return streamProperDivisors(num).sum();
     }
 
     /**
      * Checks if the given long value is prime.
      *
-     * @param input
-     * @return
+     * @param input The input number to check.
+     * @return True if this integer is prime, false if not.
      */
     static boolean isPrime(final long input) {
         if (input < 2) return false;
@@ -117,9 +115,7 @@ final class EulerUtils {
      * @return
      */
     static IntStream streamDigits(final long input) {
-        return String.valueOf(input)
-                .chars()
-                .map(num -> num - 48);
+        return String.valueOf(input).chars().map(num -> num - 48);
     }
 
     /**
@@ -136,10 +132,17 @@ final class EulerUtils {
         return total;
     }
 
+    /**
+     * Given a Collection, this method returns a stream of all the different permutations of that Collection.
+     *
+     * @param seed A {@link Collection} of items.
+     * @param <T>  The type of the item.
+     * @return A {@link Stream} of {@link List}s, where each list is a different permutation of the ordering of the
+     * elements from the seed Collection.
+     */
     static <T> Stream<List<T>> streamPermutations(final Collection<T> seed) {
         final Iterable<List<T>> iterableDigitPermutator = () -> new PermutationIterator<>(seed);
         return StreamSupport.stream(iterableDigitPermutator.spliterator(), false);
     }
-
 
 }
