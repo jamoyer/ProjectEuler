@@ -13,47 +13,45 @@ import java.util.stream.StreamSupport;
 final class EulerUtils {
 
     /**
-     * Returns a {@link Set} of this number's proper divisors.
+     * Returns a {@link Set} of this number's divisors.
      *
-     * @param num The number to find the divisors of.
+     * @param input The number to find the divisors of.
      * @return A {@link Set} of this number's divisors.
      */
-    static Set<Long> findDivisors(final long num) {
-        if (num < 1) {
+    static Set<Long> findDivisors(final long input) {
+        if (input < 1) {
             return Collections.emptySet();
         }
 
-        return LongStream.iterate(1, i -> i + 1)
-                .takeWhile(i -> i < Math.sqrt(num))
-                .filter(i -> num % i == 0)
-                .flatMap(i -> LongStream.of(i, num / i))
+        return LongStream.range(1, (long) Math.sqrt(input))
+                .filter(i -> input % i == 0)
+                .flatMap(i -> LongStream.of(i, input / i))
                 .boxed()
                 .collect(Collectors.toSet());
     }
 
     /**
-     * Returns a {@link LongStream} of this number's proper divisors.
+     * Returns a {@link LongStream} of this number's proper divisors, that is,
+     * all the divisors of this number besides itself.
      *
-     * @param num
-     * @return
-     * @see EulerUtils#findDivisors(long)
+     * @param input The number to compute the proper divisors for.
+     * @return A {@link LongStream} of this number's proper divisors.
      */
-    static LongStream streamProperDivisors(final long num) {
-        return EulerUtils.findDivisors(num)
+    static LongStream streamProperDivisors(final long input) {
+        return EulerUtils.findDivisors(input)
                 .stream()
                 .mapToLong(Long::longValue)
-                .filter(divisor -> divisor != num);
+                .filter(divisor -> divisor != input);
     }
 
     /**
      * Returns the sum of all this long's proper divisors.
      *
-     * @param num
-     * @return
-     * @see EulerUtils#streamProperDivisors
+     * @param input The number to compute the proper divisor sum for.
+     * @return A long representing the sum of this number's proper divisors.
      */
-    static long findProperDivisorSum(final long num) {
-        return streamProperDivisors(num).sum();
+    static long findProperDivisorSum(final long input) {
+        return streamProperDivisors(input).sum();
     }
 
     /**
@@ -76,8 +74,8 @@ final class EulerUtils {
     /**
      * Checks if the given string is a palindrome.
      *
-     * @param input
-     * @return
+     * @param input The input to check.
+     * @return True if this input is a palindrome, otherwise false.
      */
     static boolean isPalindrome(final String input) {
         for (int i = 0; i < input.length() / 2; i++) {
@@ -91,8 +89,8 @@ final class EulerUtils {
     /**
      * Checks if the given number is a palindrome.
      *
-     * @param input
-     * @return
+     * @param input The number to check.
+     * @return True if this number is a palindrome, otherwise false.
      */
     static boolean isPalindrome(final long input) {
         return isPalindrome(String.valueOf(input));
@@ -101,8 +99,8 @@ final class EulerUtils {
     /**
      * Given a long value this method returns a list of its digits.
      *
-     * @param input
-     * @return
+     * @param input The long input to split into a {@link List} of integer digits.
+     * @return An {@link List} of this long's digits.
      */
     static List<Integer> splitNumber(final long input) {
         return streamDigits(input).boxed().collect(Collectors.toList());
@@ -111,8 +109,8 @@ final class EulerUtils {
     /**
      * Given a long value this method returns a stream of its digits.
      *
-     * @param input
-     * @return
+     * @param input The long input to split into a {@link Stream} of integer digits.
+     * @return An {@link IntStream} of this long's digits.
      */
     static IntStream streamDigits(final long input) {
         return String.valueOf(input).chars().map(num -> num - 48);
@@ -121,8 +119,8 @@ final class EulerUtils {
     /**
      * Merges all the Integers of the input list into a single long value.
      *
-     * @param digits
-     * @return
+     * @param digits The {@link List} of digits to merge.
+     * @return A long value resulting in merging the digits together.
      */
     static long mergeDigits(final List<Integer> digits) {
         long total = 0;
