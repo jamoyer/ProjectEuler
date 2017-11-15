@@ -113,7 +113,14 @@ final class EulerUtils {
      * @return An {@link IntStream} of this long's digits.
      */
     static IntStream streamDigits(final long input) {
-        return String.valueOf(input).chars().map(num -> num - 48);
+        return streamDigits(String.valueOf(input));
+    }
+
+    /**
+     * @see EulerUtils#streamDigits(long)
+     */
+    static IntStream streamDigits(final String input) {
+        return input.chars().map(num -> num - 48);
     }
 
     /**

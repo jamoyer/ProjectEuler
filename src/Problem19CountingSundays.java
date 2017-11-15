@@ -10,7 +10,7 @@ public class Problem19CountingSundays {
         final LocalDate firstDay = LocalDate.of(1901, Month.JANUARY, 1);
         final long numSundays = Stream.iterate(firstDay, date -> date.plusMonths(1))
                 .filter(date -> date.getDayOfWeek() == DayOfWeek.SUNDAY)
-                .takeWhile(date -> lastDay.isAfter(date) || lastDay.isEqual(date))
+                .takeWhile(date -> !lastDay.isBefore(date))
                 .count();
         System.out.println(numSundays);
     }

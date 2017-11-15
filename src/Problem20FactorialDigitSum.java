@@ -9,10 +9,7 @@ public class Problem20FactorialDigitSum {
                 .mapToObj(BigInteger::valueOf)
                 .reduce(BigInteger.ONE, BigInteger::multiply);
 
-        final String[] digits = factorial.toString().split("");
-        final int sumOfDigits = Arrays.stream(digits)
-                .mapToInt(Integer::parseInt)
-                .sum();
+        final int sumOfDigits = EulerUtils.streamDigits(factorial.toString()).sum();
 
         System.out.println(sumOfDigits);
     }
