@@ -96,6 +96,10 @@ final class EulerUtils {
         return isPalindrome(String.valueOf(input));
     }
 
+    static int countDigits(final long input) {
+        return (int) Math.ceil(Math.log10(input + 1));
+    }
+
     /**
      * Given a long value this method returns a list of its digits.
      *
