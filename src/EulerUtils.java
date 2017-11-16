@@ -107,6 +107,16 @@ final class EulerUtils {
     }
 
     /**
+     * Given a long value this method returns a set of its digits.
+     *
+     * @param input The long input to split into a {@link Set} of integer digits.
+     * @return An {@link Set} of this long's digits.
+     */
+    static Set<Integer> getDigitSet(final long input) {
+        return streamDigits(input).boxed().collect(Collectors.toSet());
+    }
+
+    /**
      * Given a long value this method returns a stream of its digits.
      *
      * @param input The long input to split into a {@link Stream} of integer digits.
