@@ -22,8 +22,8 @@ public class Problem44PentagonNumbers {
     private static Optional<Long> findPentagonalSumAndDifference(final long pentagonal, final Set<Long> pentagonals) {
         return pentagonals.stream()
                 .sorted(Collections.reverseOrder())
-                .filter(num -> pentagonals.contains(num + pentagonal))
-                .map(num -> pentagonal - num)
+                .filter(num -> pentagonals.contains(pentagonal - num))
+                .map(num -> num * 2 - pentagonal)
                 .filter(pentagonals::contains)
                 .findFirst();
     }
