@@ -1,7 +1,10 @@
 import org.apache.commons.collections4.iterators.PermutationIterator;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -107,7 +110,18 @@ final class EulerUtils {
      * @return An {@link List} of this long's digits.
      */
     static List<Integer> splitNumber(final long input) {
-        return streamDigits(input).boxed().collect(Collectors.toList());
+        if (input == 0) {
+            return List.of(0);
+        }
+
+        final List<Integer> digits = new ArrayList<>();
+        long positiveInput = Math.abs(input);
+        while(positiveInput > 0) {
+            digits.add((int) (positiveInput % 10));
+            positiveInput /= 10;
+        }
+        Collections.reverse(digits);
+        return digits;
     }
 
     /**
@@ -117,7 +131,7 @@ final class EulerUtils {
      * @return An {@link Set} of this long's digits.
      */
     static Set<Integer> getDigitSet(final long input) {
-        return streamDigits(input).boxed().collect(Collectors.toSet());
+        return new HashSet<>(splitNumber(input));
     }
 
     /**
@@ -127,7 +141,7 @@ final class EulerUtils {
      * @return An {@link IntStream} of this long's digits.
      */
     static IntStream streamDigits(final long input) {
-        return streamDigits(String.valueOf(input));
+        return splitNumber(input).stream().mapToInt(Integer::intValue);
     }
 
     /**
@@ -135,6 +149,16 @@ final class EulerUtils {
      */
     static IntStream streamDigits(final String input) {
         return input.chars().map(num -> num - 48);
+    }
+
+    static IntStream streamDigits(final BigInteger input) {
+        return streamDigits(input.toString());
+    }
+
+    static BigInteger reverseBigInteger(final BigInteger input) {
+        final String digits = input.toString();
+        final String reversed = new StringBuilder(digits).reverse().toString();
+        return new BigInteger(reversed);
     }
 
     /**
